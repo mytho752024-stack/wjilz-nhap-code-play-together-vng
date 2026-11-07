@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Play Together VNG | VNGGames Giftcode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Be Vietnam Pro', sans-serif; }
+
+        body {
+            background-color: #ffe4e1;
+            background-image: url('https://cdn.omnirise.com/cms/4414_ptg_Hieu_VV_kietvh_BG_2160x1140_4fc82fc1dc.jpg?w=1080&q=75');
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header { background: white; padding: 12px 20px; display: flex; flex-direction: column; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .header-top { display: flex; justify-content: flex-start; align-items: center; font-size: 13px; color: #555; margin-bottom: 12px; gap: 20px; font-weight: 500; }
+        .header-top .links { display: flex; gap: 20px; cursor: pointer; }
+        .header-top .links span:hover { color: #f05c22; }
+        
+        .header-main { display: flex; align-items: center; gap: 15px; }
+        .header-main img { height: 28px; }
+        .search-bar { flex: 1; display: flex; align-items: center; background: #f5f5f5; padding: 8px 12px; border-radius: 4px; color: #888; font-size: 14px; }
+        .search-bar svg { width: 18px; height: 18px; margin-right: 8px; fill: #888; }
+        .btn-login { background-color: #f05c22; color: white; border: none; padding: 8px 20px; border-radius: 4px; font-weight: 600; font-size: 14px; cursor: pointer; }
+        .menu-icon { font-size: 24px; color: #333; cursor: pointer; }
+
+        /* CONTAINER CHÍNH - GIẢM PADDING ĐỂ SÁT LỀ */
+        .main-container { flex: 1; padding: 0 8px 30px 8px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* BANNER & LOGO */
+        .banner-img { width: 100%; max-width: 100%; border-radius: 12px; margin-top: 15px; margin-bottom: 10px; object-fit: cover; }
+        .game-logo-text { font-family: 'Lilita One', cursive; font-size: 38px; color: #FFF4E6; text-transform: uppercase; text-align: center; letter-spacing: 1px; line-height: 1.1; text-shadow: -2px -2px 0 #D13B00, 2px -2px 0 #D13B00, -2px 2px 0 #D13B00, 2px 2px 0 #D13B00, -3px 3px 0 #A82B00, 3px 3px 0 #A82B00, 4px 4px 0 #7A1C00, 5px 5px 0 #7A1C00, 6px 6px 15px rgba(0,0,0,0.3); margin-bottom: 20px; }
+        
+        /* CARD CHÍNH - ÉP RỘNG SÁT LỀ MÀN HÌNH */
+        .card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 25px 15px; /* Giảm padding 2 bên để ruột to ra */
+            width: 100%; 
+            max-width: 100%; /* Xóa bỏ giới hạn để nó bành ra */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+        }
+        
+        /* Trên màn hình máy tính thì thu lại cho đẹp, trên đt thì full */
+        @media (min-width: 768px) {
+            .card { max-width: 700px; padding: 30px; } 
+        }
+        
+        /* KHUNG ĐĂNG NHẬP MÀU XANH */
+        .login-prompt { border: 1px solid #a7d1f7; background-color: #eaf4ff; border-radius: 8px; padding: 15px; margin-bottom: 25px; }
+        .login-prompt h4 { color: #1759a6; font-size: 15px; margin-bottom: 8px; font-weight: 700; }
+        .login-prompt p { color: #3373c4; font-size: 13px; margin-bottom: 15px; line-height: 1.4; }
+        .btn-login-prompt { background-color: white; color: #1759a6; border: none; padding: 10px 15px; border-radius: 4px; font-weight: 600; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; }
+
+        .input-label { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 10px; display: block; }
+        
+        /* Ô NHẬP CODE */
+        .tag-input-container { display: flex; flex-wrap: wrap; gap: 10px; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 15px; background: #fff; min-height: 48px; align-items: center; transition: all 0.2s; cursor: text; margin-bottom: 25px; }
+        .tag-input-container:focus-within { border-color: #f05c22; }
+        
+        #codeForm { display: flex; flex: 1; min-width: 150px; align-items: center; }
+        #codeForm input { border: none; outline: none; flex: 1; font-size: 14px; color: #333; background: transparent; padding: 5px 0; text-transform: uppercase; font-weight: 500; }
+        #codeForm input::placeholder { color: #999; font-weight: 400; }
+
+        .code-tag { display: inline-flex; align-items: center; background-color: #f0f0f0; color: #333; border-radius: 4px; padding: 6px 10px; font-size: 14px; font-weight: 500; }
+        .code-tag .close-tag { margin-left: 8px; font-size: 18px; color: #888; cursor: pointer; line-height: 0.8; }
+        .code-tag .close-tag:hover { color: #d32f2f; }
+
+        /* THÔNG TIN GAME */
+        .info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .info-header h3 { font-size: 14px; color: #333; font-weight: 600; }
+        .info-header a { font-size: 13px; color: #1975d2; text-decoration: none; font-weight: 500; }
+        
+        /* Ô NHẬP LIỆU GAME */
+        .input-group { border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 15px; display: flex; align-items: center; margin-bottom: 15px; background: #fff; transition: all 0.2s; }
+        .input-group:focus-within { border-color: #f05c22; }
+        .input-group input { border: none; outline: none; flex: 1; font-size: 14px; color: #333; background: transparent; font-weight: 500; }
+        .search-icon-svg { width: 18px; height: 18px; margin-right: 10px; flex-shrink: 0; color: #888; }
+        .input-group .clear-btn { color: #888; cursor: pointer; font-size: 18px; line-height: 1; padding: 0 5px; }
+
+        /* MÃ XÁC THỰC (CAPTCHA) */
+        .captcha-container { margin-bottom: 20px; }
+        .captcha-box { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        
+        .captcha-text { 
+            display: flex; 
+            gap: 10px; 
+            font-family: Arial, sans-serif;
+            font-size: 26px; 
+            font-weight: bold; 
+            background: #f5f5f5;
+            padding: 10px 20px; 
+            border-radius: 4px; 
+            user-select: none; 
+            background-image: repeating-linear-gradient(45deg, #eaeaea 0, #eaeaea 2px, transparent 2px, transparent 6px);
+            width: max-content;
+            justify-content: center; 
+            letter-spacing: 5px;
+        }
+        
+        .captcha-text span { display: inline-block; }
+        .captcha-refresh { cursor: pointer; font-size: 24px; color: #888; transition: transform 0.3s; padding: 5px; }
+        .captcha-refresh:hover { transform: rotate(180deg); color: #333; }
+        
+        .captcha-input-group { max-width: 100%; width: 100%; margin-bottom: 0; }
+
+        /* NÚT NHẬP CODE */
+        .btn-submit { background-color: #f05c22; color: white; border: none; width: 100%; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: 600; margin-top: 15px; cursor: pointer; transition: all 0.2s ease; }
+        .btn-submit:disabled { background-color: #f5f5f5; color: #b0b0b0; cursor: not-allowed; pointer-events: none; }
+        .btn-submit:not(:disabled):active { background-color: #d84e1b; transform: scale(0.98); }
+
+        .bottom-banner { width: 100%; max-width: 100%; border-radius: 12px; margin-top: 10px; margin-bottom: 20px; }
+
+        /* FOOTER */
+        .footer { background-color: #1a1a1a; color: white; padding: 25px 20px; font-size: 13px; width: 100%; }
+        .footer-logo { height: 24px; margin-bottom: 15px; }
+        .footer-links { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .footer-links a { color: white; text-decoration: none; }
+        .footer-copyright { border-top: 1px solid #333; padding-top: 15px; margin-top: 10px; color: #aaa; }
+        .footer-bottom-links { display: flex; gap: 15px; margin-top: 10px; }
+        .footer-bottom-links a { color: #aaa; text-decoration: none; }
+
+        /* POPUP MODALS */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: #ffffff; border-radius: 16px; width: 100%; max-width: 380px; padding: 25px 20px; position: relative; animation: popIn 0.25s ease-out; text-align: center; }
+        @keyframes popIn { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 24px; font-weight: bold; color: #333; cursor: pointer; line-height: 1; }
+        .modal-icon { width: 70px; height: 70px; border-radius: 16px; margin: 0 auto 15px auto; display: block; }
+        .modal-title { font-size: 20px; font-weight: 700; color: #222; margin-bottom: 8px; }
+        .modal-subtitle { font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.4; }
+        .dashed-line { border-top: 1.5px dashed #e0e0e0; margin-bottom: 20px; }
+        .success-text { text-align: left; font-size: 16px; font-weight: 700; color: #222; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .success-text .check { color: #2baa6d; font-size: 20px; font-weight: bold; }
+        
+        .reward-box { background-color: #fffcf5; border: 1px solid #fdecc8; border-radius: 12px; padding: 15px; text-align: left; margin-bottom: 25px; }
+        .reward-label { font-size: 14px; color: #333; font-weight: 500; margin-bottom: 8px; line-height: 1.4; }
+        .reward-name { font-size: 16px; color: #d84315; font-weight: 700; margin-bottom: 15px; }
+        .reward-content { display: flex; align-items: center; gap: 12px; }
+        
+        .reward-icon-bg { width: 65px; height: 65px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-color: #E793E8; }
+        .reward-icon-bg.vvip-bg { background: linear-gradient(135deg, #8CF0FF 0%, #ACD5FF 33%, #D2B0FF 66%, #EC9AFF 100%); background-size: 300% 300%; animation: moveGradient 3s ease-in-out infinite alternate; }
+        @keyframes moveGradient { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+        .reward-icon-bg.purple-bg { background-color: #F3A1FF; } 
+        .reward-icon-bg.cyan-bg { background-color: #62E1E6; }   
+        .reward-icon-bg img { width: 45px; height: 45px; object-fit: contain; }
+        .reward-desc { font-size: 13px; color: #555; line-height: 1.4; }
+        
+        .modal-actions { display: flex; gap: 12px; justify-content: center; }
+        .btn-outline { background: #ffffff; border: 1px solid #ccc; color: #333; padding: 12px 0; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; flex: 1; }
+        .btn-primary { background: #f05c22; border: 1px solid #f05c22; color: #ffffff; padding: 12px 0; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; flex: 1; }
+        
+        .alert-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1001; padding: 20px; }
+        .alert-overlay.active { display: flex; }
+        .alert-box { background: white; border-radius: 14px; padding: 25px 20px; width: 100%; max-width: 320px; text-align: center; animation: popIn 0.2s ease-out; }
+        .alert-text { font-size: 16px; color: #333; font-weight: 600; margin-bottom: 20px; line-height: 1.4; }
+        .btn-alert-ok { background: #f05c22; color: white; border: none; padding: 10px 0; border-radius: 6px; font-weight: 600; font-size: 15px; width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-top">
+            <div class="links">
+                <span>VNGGames</span>
+                <span>Shop</span>
+                <span>Club</span>
+                <span>Support</span>
+            </div>
+        </div>
+        <div class="header-main">
+            <img src="https://cdn-cms.vnggames.com/cms/vnggames_logo_orange_black_5e07ecf9f6.png?w=200" alt="VNGGames">
+            <div class="search-bar">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <span>Nhập tên game</span>
+            </div>
+            <span style="font-size: 14px; color: #555; font-weight: 500;">VN</span>
+            <button class="btn-login">Đăng nhập</button>
+            <div class="menu-icon">☰</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <img src="https://cdn.omnirise.com/cms/4414_ptg_Hieu_VV_kietvh_TRAI_686x294_b6cfabc099.jpg?w=800" alt="Banner" class="banner-img" style="object-position: left top;">
+        
+        <div class="game-logo-text">PLAY TOGETHER VNG</div>
+
+        <div class="card">
+            <div class="login-prompt">
+                <h4>Tối ưu trải nghiệm nhập code</h4>
+                <p>Đăng nhập để rút ngắn thời gian nhập code và kiểm tra lịch sử nhập code bất cứ lúc nào</p>
+                <button class="btn-login-prompt">Đăng nhập ngay</button>
+            </div>
+
+            <label class="input-label">Nhập thông tin code</label>
+            
+            <div class="tag-input-container" id="codeContainer" onclick="focusCodeInput()">
+                <form id="codeForm">
+                    <input type="text" id="giftcodeInput" placeholder="Nhập thông tin code" autocomplete="off">
+                </form>
+            </div>
+
+            <div class="info-header">
+                <h3>Thông tin Game</h3>
+                <a href="#">ⓘ Hướng dẫn tìm Nhân vật</a>
+            </div>
+
+            <div class="input-group">
+                <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <input type="text" value="Server 2" readonly>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="charIdInput" placeholder="Chọn nhân vật / Nhập ID nhân vật" value="PK6C-X29L-LMYY">
+                <span class="clear-btn" onclick="document.getElementById('charIdInput').value = ''">×</span>
+            </div>
+
+            <!-- MÃ XÁC THỰC -->
+            <div class="captcha-container">
+                <label class="input-label">Mã xác thực</label>
+                <div class="captcha-box">
+                    <div class="captcha-text" id="captchaDisplay"></div>
+                    <div class="captcha-refresh" onclick="generateCaptcha()">↻</div>
+                </div>
+                <div class="input-group captcha-input-group" style="margin-bottom: 0;">
+                    <input type="text" id="captchaInput" placeholder="Nhập mã xác thực trên" autocomplete="off">
+                </div>
+            </div>
+
+            <button class="btn-submit" id="btnSubmit" disabled onclick="showSuccessModal()">Nhập code</button>
+        </div>
+
+        <img src="https://cdn.omnirise.com/cms/4414_ptg_Hieu_VV_kietvh_PHAI_686x294_d22fbc3e09.jpg?w=800" alt="Bottom Banner" class="bottom-banner">
+    </div>
+
+    <footer class="footer">
+        <img src="https://cdn-cms.vnggames.com/cms/vnggames_logo_orange_white_ed70c6cebe.png?w=200" alt="VNGGames" class="footer-logo">
+        <div class="footer-links">
+            <a href="#">Chăm sóc khách hàng</a>
+        </div>
+        <div class="footer-copyright">
+            <span>©Copyright © 2023 VNG. All Rights Reserved.</span>
+        </div>
+        <div class="footer-bottom-links">
+            <a href="#">Chính sách bảo mật</a>
+            <a href="#">Quản lý cookie</a>
+        </div>
+    </footer>
+
+    <!-- POPUP CHỮ ĐỎ -->
+    <div class="alert-overlay active" id="warningModal">
+        <div class="alert-box" style="border: 1px solid #d32f2f;">
+            <div class="alert-text" style="color: #d32f2f; font-weight: 600;">Mỗi mã code trong trang web này chỉ có tối đa 2 lượt nhập, đây là trang web thử nghiệm và khuyến khích người chơi chỉ nên nhập trong tài khoản phụ của game.</div>
+            <button class="btn-alert-ok" onclick="document.getElementById('warningModal').classList.remove('active');">Tôi đã hiểu</button>
+        </div>
+    </div>
+
+    <!-- POPUP THÀNH CÔNG -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <img src="https://cdn-club.vnggames.com/media/2026/07/PTG_SEA_APP_ICON_300X300.png" alt="Play Together" class="modal-icon">
+            <div class="modal-title">Hoàn tất nhập mã</div>
+            <div class="modal-subtitle" id="modalSubtitle">Bạn đã nhập thành công 1/1 code cho game <b>Play Together VNG</b></div>
+            <div class="dashed-line"></div>
+            <div class="success-text"><span class="check">✓</span> Thành công:</div>
+            <div class="reward-box">
+                <div class="reward-label">Đã nhập code thành công và nhận được:</div>
+                <div class="reward-name" id="rewardName">Bảng tên: Thổ địa Phố Việt</div>
+                <div class="reward-content">
+                    <div class="reward-icon-bg" id="rewardIconBg">
+                        <img src="" id="rewardImg" alt="">
+                    </div>
+                    <div class="reward-desc" id="rewardDesc"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-outline" onclick="closeModal()">Xác nhận</button>
+                <button class="btn-primary">Khám phá Club</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP LỖI -->
+    <div class="alert-overlay" id="alertModal">
+        <div class="alert-box">
+            <div class="alert-text" id="alertMessage">Nội dung thông báo</div>
+            <button class="btn-alert-ok" onclick="document.getElementById('alertModal').classList.remove('active')">OK</button>
+        </div>
+    </div>
+
+    <script>
+        const codeContainer = document.getElementById('codeContainer');
+        const codeForm = document.getElementById('codeForm');
+        const giftcodeInput = document.getElementById('giftcodeInput');
+        const captchaInput = document.getElementById('captchaInput');
+        const captchaDisplay = document.getElementById('captchaDisplay');
+        const btnSubmit = document.getElementById('btnSubmit');
+        
+        let enteredCodes = []; 
+        let currentCaptcha = "";
+
+        const soundPopup = new Audio('https://files.catbox.moe/6xu07e.mp3');   
+        const soundThuong = new Audio('https://files.catbox.moe/pmnjp2.mp3');  
+
+        function playSound(sound) { if (sound) { sound.currentTime = 0; sound.play().catch(e => {}); } }
+        function focusCodeInput() { giftcodeInput.focus(); }
+
+        function generateCaptcha() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            const colors = ["#FF5733", "#33FF57", "#3357FF", "#F333FF", "#FF33A8", "#33FFF0", "#FFB533", "#8E44AD", "#E67E22", "#2980B9"];
+            let result = "";
+            captchaDisplay.innerHTML = "";
+            
+            for (let i = 0; i < 4; i++) {
+                let char = chars.charAt(Math.floor(Math.random() * chars.length));
+                result += char;
+                let span = document.createElement("span");
+                span.textContent = char;
+                span.style.color = colors[Math.floor(Math.random() * colors.length)];
+                span.style.fontFamily = "Arial, sans-serif";
+                let rotate = Math.floor(Math.random() * 40) - 20;
+                span.style.transform = `rotate(${rotate}deg)`;
+                captchaDisplay.appendChild(span);
+            }
+            currentCaptcha = result;
+            captchaInput.value = ""; 
+            checkFormState();
+        }
+        
+        window.onload = function() { generateCaptcha(); };
+        captchaInput.addEventListener('input', checkFormState);
+
+        function checkFormState() {
+            if (enteredCodes.length > 0 && captchaInput.value.trim() !== "") {
+                btnSubmit.disabled = false;
+            } else {
+                btnSubmit.disabled = true;
+            }
+        }
+
+        const giftcodeDatabase = {
+            "THODIAPHOVIETPT": { name: "Bảng tên: Thổ địa Phố Việt", img: "https://cdn.upanhlaylink.com/i/vzeo1q99.png", desc: "Thổ địa chính hiệu là đây, phố nào cũng quen, chỗ nào cũng biết.", bgClass: "" },
+            "PINKVENOMVEHICLE": { name: "Xe Pink Venom", img: "https://cdn.upanhlaylink.com/i/F1wsWMPJ.webp", desc: "Đường nét sắc sảo cùng thân màu hồng ấp đảo mọi ánh nhìn.", bgClass: "vvip-bg" },
+            "HEARTGUARDIAN2026": { name: "Phi cơ hộ vệ trái tim", img: "https://cdn.upanhlaylink.com/i/VTxRUQPX.webp", desc: "Mang theo trái tim rộn ràng, xuất kích mạnh mẽ lên bầu trời!", bgClass: "purple-bg" },
+            "ICECRYSTALWINGS": { name: "Cánh tinh thể băng", img: "https://cdn.upanhlaylink.com/i/NkgKfpO9.webp", desc: "Bay nhẹ như tinh thể băng!", bgClass: "purple-bg" },
+            "SWORDPEGASUS2026": { name: "Thiên mã của kiếm khách", img: "https://cdn.upanhlaylink.com/i/HBSPVuL1.webp", desc: "Chú thiên mã đã đồng hành lâu dài cùng Người kế thừa thân kiếm.", bgClass: "purple-bg" },
+            "TRAVELPREPMAT2026": { name: "Thảm chuẩn bị du lịch", img: "https://cdn.upanhlaylink.com/i/KcAlH9kb.webp", desc: "Trước khi bắt đầu chuyến đi đầy phấn khởi, hãy ngồi nghỉ một lát và lên kế hoạch.", bgClass: "cyan-bg" }
+        };
+
+        function removeTag(text, tagElement) {
+            enteredCodes = enteredCodes.filter(c => c !== text);
+            tagElement.remove();
+            checkFormState();
+        }
+
+        codeForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            const value = giftcodeInput.value.trim().toUpperCase();
+            if (value === '') return;
+            if (enteredCodes.length >= 5) { showAlert('Bạn chỉ được nhập tối đa 5 mã code!'); giftcodeInput.value = ''; return; }
+            if (enteredCodes.includes(value)) { showAlert('Mã code này đã được nhập rồi!'); giftcodeInput.value = ''; return; }
+            
+            enteredCodes.push(value);
+            const tag = document.createElement('div');
+            tag.className = 'code-tag';
+            tag.innerHTML = `<span>${value}</span><span class="close-tag" onclick="removeTag('${value}', this.parentElement)">&times;</span>`;
+            codeContainer.insertBefore(tag, codeForm);
+
+            giftcodeInput.value = '';
+            checkFormState(); 
+            giftcodeInput.focus();
+        });
+
+        function showAlert(message) {
+            document.activeElement.blur();
+            document.getElementById('alertMessage').textContent = message;
+            document.getElementById('alertModal').classList.add('active');
+            playSound(soundPopup); 
+        }
+
+        function closeModal() { document.getElementById('successModal').classList.remove('active'); }
+
+        function showSuccessModal() {
+            document.activeElement.blur(); 
+
+            const inputCaptcha = captchaInput.value.trim();
+            if (inputCaptcha !== currentCaptcha) {
+                showAlert('Mã xác thực không đúng. Vui lòng thử lại!');
+                generateCaptcha(); 
+                return; 
+            }
+
+            let foundReward = null;
+            for (let i = 0; i < enteredCodes.length; i++) {
+                if (giftcodeDatabase[enteredCodes[i]]) {
+                    foundReward = giftcodeDatabase[enteredCodes[i]];
+                    break; 
+                }
+            }
+
+            if (!foundReward) {
+                showAlert('Mã code không hợp lệ hoặc đã hết hạn. Vui lòng kiểm tra lại!');
+                generateCaptcha(); 
+                return; 
+            }
+            
+            document.getElementById('rewardName').textContent = foundReward.name; 
+            document.getElementById('rewardImg').src = foundReward.img; 
+            document.getElementById('rewardDesc').textContent = foundReward.desc; 
+            
+            const bg = document.getElementById('rewardIconBg');
+            bg.className = "reward-icon-bg"; 
+            if (foundReward.bgClass) bg.classList.add(foundReward.bgClass);
+
+            playSound(soundThuong);
+            document.getElementById('successModal').classList.add('active');
+
+            enteredCodes = [];
+            document.querySelectorAll('.code-tag').forEach(t => t.remove());
+            generateCaptcha();
+            checkFormState();
+        }
+    </script>
+</body>
+  </html>
